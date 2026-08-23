@@ -86,17 +86,7 @@ If you are looking for free, open-source alternatives with built-in folder tree 
 | **Foam / VS Code** | Open-source extension ecosystem, complete folder tree explorer, customizable live preview.                   | Developer-centric workflow & repository-based notes |
 | **AppFlowy**       | Open-source Notion alternative, folder tree sidebar, board & table views, local storage.                     | Workspace organization & project documentation      |
 
-
-
-
-
-
-
-
-
 ---
-
-
 
 Yes, you can launch MarkText from the terminal and pass the current directory to open it directly with the folder tree loaded.
 
@@ -131,7 +121,7 @@ alias mark="open -a 'MarkText'"
 Add a symlink or alias pointing to your executable or Flatpak package in `~/.bashrc`:
 
 - **AppImage / Binary:**
-
+  
   Bash
 
 ```
@@ -139,7 +129,7 @@ alias mark="marktext"
 ```
 
 - **Flatpak:**
-
+  
   Bash
 
 ```
@@ -161,17 +151,7 @@ function mark {
 
 - **Usage:** `mark .`
 
-
-
-
-
-
-
 ---
-
-
-
-
 
 Yes, you can launch MarkText from the terminal and pass the current directory to open it directly with the folder tree loaded.
 
@@ -206,7 +186,7 @@ alias mark="open -a 'MarkText'"
 Add a symlink or alias pointing to your executable or Flatpak package in `~/.bashrc`:
 
 - **AppImage / Binary:**
-
+  
   Bash
 
 ```
@@ -214,7 +194,7 @@ alias mark="marktext"
 ```
 
 - **Flatpak:**
-
+  
   Bash
 
 ```
@@ -235,3 +215,179 @@ function mark {
 ```
 
 - **Usage:** `mark .`
+
+
+
+
+
+---
+
+
+
+
+
+MarkText is not in `Program Files` because Windows installs user-level apps in your personal `AppData` folder.
+
+### Step 1: Find MarkText Executable
+
+In the **Abrir con...** file dialog window currently open on your screen:
+
+1. Click on the top address bar in that window where it currently says `Windows (C:) > Program Files`.
+
+2. Paste this exact line into the address bar and press **Enter**:
+
+  Plaintext
+
+```
+%LocalAppData%\Programs\marktext
+```
+
+3. You will see `MarkText.exe`. Select it and click **Abrir**.
+
+*(Note: If you downloaded the Portable ZIP version instead, navigate to your **Descargas** or **Escritorio** folder where you extracted `marktext-win-x64` and select `marktext.exe` inside it).*
+
+### Step 2: Make `marktext` Work in PowerShell
+
+Once you locate `MarkText.exe`, link it to your terminal:
+
+1. Open PowerShell and run:
+
+  PowerShell
+
+```
+if (!(Test-Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+notepad $PROFILE
+```
+
+2. Paste this line into Notepad:
+
+  PowerShell
+
+```
+function marktext { & "$env:LocalAppData\Programs\marktext\MarkText.exe" $args }
+```
+
+3. Save, close Notepad, and restart PowerShell. Now typing `marktext README.md` will launch it directly.
+
+
+
+---
+
+
+
+
+
+To set your editor as the **default application** for `.md` files in Windows File Explorer:
+
+### Step 1: Set Default File Handler
+
+1. Right-click any `.md` file.
+
+2. Hover over **Abrir con** (Open with) and click **Elegir otra aplicación** (Choose another app) at the bottom of the sub-menu.
+
+3. Scroll down in the pop-up list and click **Elegir una aplicación en el equipo** (Choose an app on your PC) or **Buscar otra aplicación en este equipo**.
+
+4. Navigate to the executable location (e.g., `Zettlr.exe` in `C:\Program Files\Zettlr\Zettlr.exe` or `MarkText.exe` in your downloaded folder).
+
+5. Select the `.exe` file and check the box that says **Siempre** (Always use this app to open .md files).
+
+### Step 2: Fix Terminal Path for PowerShell
+
+To figure out why the terminal command didn't work, run this command in PowerShell to locate where the editor `.exe` is saved on your drive:
+
+PowerShell
+
+```
+Get-ChildItem -Path "C:\Program Files", "$env:LocalAppData\Programs" -Filter "*marktext*.exe" -Recurse -ErrorAction SilentlyContinue
+```
+
+*(If using Zettlr, replace `*marktext*.exe` with `*zettlr*.exe`).*
+
+Once PowerShell prints the path to the `.exe`, copy it and add a temporary alias to your current session:
+
+PowerShell
+
+```
+Set-Alias -Name marktext -Value "C:\Full\Path\To\marktext.exe"
+```
+
+You will then be able to open any file directly from your terminal by running `marktext README.md`.
+
+
+
+
+
+---
+
+
+
+
+
+This error happens because Windows hasn't added `marktext.exe` to your system environment `PATH` yet.
+
+Here are the quickest ways to open your files from the terminal, depending on how you ended up installing or extracting MarkText:
+
+### Method 1: Try Default Install Paths
+
+If you installed MarkText using an setup installer, run one of these exact lines in PowerShell:
+
+PowerShell
+
+```
+& "$env:LocalAppData\Programs\marktext\MarkText.exe" README.md
+```
+
+*or*
+
+PowerShell
+
+```
+& "C:\Program Files\MarkText\MarkText.exe" README.md
+```
+
+### Method 2: Create a Permanent `marktext` Command
+
+To make typing `marktext README.md` work permanently from any folder in PowerShell:
+
+1. Create a PowerShell profile if you don't already have one:
+
+  PowerShell
+
+```
+if (!(Test-Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+```
+
+2. Open the profile file in Notepad:
+
+  PowerShell
+
+```
+notepad $PROFILE
+```
+
+3. Paste **one** of the following lines into Notepad (replace the path if you are using the portable `.exe` folder):
+
+  PowerShell
+
+```
+function marktext { & "$env:LocalAppData\Programs\marktext\MarkText.exe" $args }
+```
+
+4. **Save and close** Notepad, then restart PowerShell.
+
+Now you can run:
+
+PowerShell
+
+```
+marktext README.md
+
+
+
+```
+
+
+
+
+
+---

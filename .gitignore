@@ -1,0 +1,12 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+
+# Environment and dependencies
+node_modules/
+.env
