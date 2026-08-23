@@ -6,7 +6,7 @@
 
 * **Style:** True WYSIWYG (Live inline rendering)
 * **Platforms:** Windows, macOS, Linux
-* **Best for:** Getting the exact Typora-like experience for free. Syntax formatting vanishes into clean text as soon as you type it.
+* **Best for:** Getting the exact Typora-like experience for free. Syntax formatting vanishes into clean text as soon as you type it. 
 
 ### 2. Zettlr
 
@@ -37,21 +37,18 @@
 **Summary**
 If you want **real-time formatted text** without seeing Markdown syntax tags, **MarkText** is the top pick. If you prefer a traditional raw editor with minimal clutter, **Ghostwriter** or **Zettlr** are great alternatives.
 
-
 Make sure to run your terminal as **Administrator** (*Ejecutar como administrador*) for these commands to execute without permission errors.
 
 ### 1. MarkText
 
 ```powershell
 choco install marktext -y
-
 ```
 
 ### 2. Zettlr
 
 ```powershell
 choco install zettlr -y
-
 ```
 
 ---
@@ -69,7 +66,6 @@ winget install Zettlr.Zettlr
 
 # VNote
 winget install vnotex.vnote
-
 ```
 
 > **Note on Ghostwriter:** Neither Chocolatey nor Winget currently maintain a Windows package for Ghostwriter. If you want to try Ghostwriter, you can download its portable build directly from the [KDE Download Page](https://ghostwriter.kde.org/download/).

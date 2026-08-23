@@ -1,7 +1,7 @@
 Step 1
 
 ```powershell
-git init
+git init -b main
 git add .
 git commit -m "Initial commit"
 git branch -M main
