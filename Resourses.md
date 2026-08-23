@@ -10,80 +10,32 @@ https://codewith.mu/es/
 
 https://www.youtube.com/watch?v=YYXdXT2l-Gg&list=PL-osiE80TeTskrapNbzXhwoFUiLCjGgY7
 
-
 https://diveintopython3.net/index.html
 
 https://books.trinket.io/pfe/
 
-
-
 https://docs.python-guide.org/
-
-
 
 https://pythonbasics.org/flask-static-files/
 https://pychallenge.com/exercise/first-script
 
-
-
 https://www.youtube.com/playlist?list=PLU8oAlHdN5BlvPxziopYZRd55pdqFwkeS
-
-
 
 https://landing.runestone.academy/
 
-
-
-
-
-
 https://tutorial.djangogirls.org/es/template_extending/
-
-
 
 https://github.com/FilledStacks/flutter-tutorials
 
-
-
 https://www.youtube.com/watch?v=yvn6I9hzsJs&list=PLdTodMosi-BzlPDJ4u16Uq9dNMAXXOcvN
-
-
 
 https://www.youtube.com/@TheFlutterWay/playlists
 
-
-
 https://docs.flutter.dev/ui/adaptive-responsive
-
-
 
 https://www.atlassian.com/software/bitbucket
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 https://www.spyder-ide.org/
-
-
-
-
 
 ![](https://mybinder.org/static/logo.svg?v=fe52c40adc69454ba7536393f76ebd715e5fb75f5feafe16a27c47483eabf3311c14ed9fda905c49915d6dbf369ae68fb855a40dd05489a7b9542a9ee532e92b)
 
@@ -292,3 +244,40 @@ Go is designed for simplicity. You study it to understand **lightweight backend 
 - *A Tour of Go* (`tour.golang.org`) — Official interactive tutorial.
 
 - *Go by Example* (`gobyexample.com`) — Concise code snippets demonstrating core features.
+
+
+
+
+
+
+
+### Is MongoDB Free?
+
+Yes, **MongoDB has a free tier and a free open-source community edition**, depending on how you choose to run it:
+
+1. **MongoDB Community Server (Free & Self-Hosted):**
+- Completely free to download, install, and run locally on your machine, server, or inside WSL/Docker.
+
+- Licensed under the **Server Side Public License (SSPL)**. You can use it freely for personal, academic, or commercial apps. The only restriction is that you cannot offer MongoDB itself as a commercial managed cloud service to third parties without open-sourcing your service platform.
+2. **MongoDB Atlas (Free Managed Cloud):**
+- MongoDB offers a managed cloud service called **Atlas**.
+
+- It includes a **`M0 Free Tier`** providing 512MB of storage with shared RAM/CPU, which is ideal for learning, prototypes, and small mobile backends without providing a credit card.
+
+### Is WatermelonDB Free?
+
+Yes, **WatermelonDB is 100% free and open-source**.
+
+- **License:** Released under the **MIT License**, which is one of the most permissive open-source licenses available.
+
+- **Usage:** You can use it freely in personal projects, open-source applications, or commercial mobile apps without any cost, restrictions, or licensing fees.
+
+- **How it works:** WatermelonDB is a framework/library built on top of **SQLite** (or native mobile database engines) for **React Native** and **React web apps**. It is optimized to handle thousands of records smoothly on mobile devices by lazy-loading data only when UI components request it.
+
+### Summary Matrix
+
+| **Database / Tool**   | **Free Tier / Open Source?** | **Best Used For**                                        |
+| --------------------- | ---------------------------- | -------------------------------------------------------- |
+| **MongoDB Community** | Free (Self-hosted SSPL)      | Backend Document Database (JSON-like schema)             |
+| **MongoDB Atlas**     | Free Tier (`M0` 512MB)       | Fully managed cloud backend database                     |
+| **WatermelonDB**      | 100% Free (MIT License)      | High-performance, local-first React Native / Mobile apps |
