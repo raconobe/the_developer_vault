@@ -1,0 +1,23 @@
+gui:
+  theme:
+    optionsTextColor:
+      - '#7dcfff'
+    selectedLineBgColor:
+      - '#283451'
+    cherryPickedCommitBgColor:
+      - '#bb9af7'
+    cherryPickedCommitFgColor:
+      - '#16161e'
+keybinding:
+  universal:
+    quit: 'q'
+    return: '<esc>'
+    prevItem: 'k'
+    nextItem: 'j'
+  files:
+    commitChanges: 'c'
+customCommands:
+  - key: '<c-f>'
+    context: 'global'
+    command: 'git push --force-with-lease'
+    loadingText: 'Force pushing safely...'

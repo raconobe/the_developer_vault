@@ -1,0 +1,439 @@
+
+The quickest way to edit config files directly in the Linux terminal is using **nano** (easiest) or **vim** (built-in everywhere), or by launching **VS Code** directly from your WSL shell.
+
+**1. Nano (Easiest Terminal Editor)**
+Nano displays shortcut keys at the bottom of the screen.
+
+```bash
+nano .bashrc
+
+```
+
+* **Edit:** Type normally.
+* **Save:** Press `Ctrl + O`, then press `Enter`.
+* **Exit:** Press `Ctrl + X`.
+
+**2. Vim (Standard on all Linux systems)**
+Vim is modal, meaning you switch between navigation and editing modes.
+
+```bash
+vim .bashrc
+
+```
+
+* **Edit:** Press `i` to enter *Insert Mode*, then edit your text.
+* **Save & Exit:** Press `Esc`, type `:wq`, and press `Enter`.
+* **Exit Without Saving:** Press `Esc`, type `:q!`, and press `Enter`.
+
+**3. VS Code from WSL (GUI Editor)**
+If you have VS Code installed on Windows, you can open files or entire project folders in VS Code directly from your WSL terminal prompt:
+
+```bash
+code .bashrc    # Opens a single file
+code .          # Opens the current folder
+
+```
+
+> **System Files Note:** If a config file is owned by root (e.g., files inside `/etc/`), prepend `sudo` to open it with administrator permissions (e.g., `sudo nano /etc/hosts`).
+>
+> 
+
+---
+
+The `.git` directory is hidden by default in Linux file managers and terminal commands because its name starts with a dot (`.`). Your repository tracking is still intact, but hidden from normal view.
+
+**Show hidden files in Thunar (GUI)**
+
+* Press **`Ctrl` + `H**` while inside the folder.
+* Or click **View** on the top menu bar and check **Show Hidden Files**.
+
+**Show hidden files in Terminal**
+Navigate to the directory and use the `-a` (all) flag:
+
+```bash
+cd ~/Desktop/projects/node-python-bridge
+ls -a
+
+```
+---
+```bash
+git add . && git commit -m "Your commit message" && git push
+
+```
+
+Using `&&` chains the commands so each step only executes if the previous one succeeds. Replace `"Your commit message"` with your actual message.
+
+
+
+---
+
+
+If you want to keep running the Linux GUI version of VS Code directly inside WSLg, the cursor misalignment happens because WSLg's graphics bridge (XWayland) and Windows DPI scaling miscalculate mouse click coordinates.
+
+---
+
+### Fix 1: Force Native Wayland Mode in VS Code
+
+By default, Linux VS Code uses X11 rendering, which causes coordinate drift in WSLg. Forcing native Wayland fixes the hitbox alignment.
+
+Launch VS Code from WSL with these flags:
+
+```bash
+code . --enable-features=UseOzonePlatform --ozone-platform=wayland
+
+```
+
+To make this permanent so you don't have to type the flags every time, edit VS Code's Linux runtime config:
+
+```bash
+nano ~/.config/Code/User/argv.json
+
+```
+
+Add these lines inside the JSON object:
+
+```json
+"enable-features": "UseOzonePlatform",
+"ozone-platform": "wayland"
+
+```
+
+---
+
+### Fix 2: Force 100% Device Scale Factor
+
+If you use Windows display scaling (e.g., 125% or 150%), WSLg scales the window visually without updating the click grid. Force 1:1 scaling by running:
+
+```bash
+code . --force-device-scale-factor=1
+
+```
+
+---
+
+### Fix 3: Set Scaling Environment Variables in `.bashrc`
+
+You can force Linux GTK applications in WSLg to ignore Windows fractional scaling.
+
+1. Open your bash configuration:
+```bash
+nano ~/.bashrc
+
+```
+
+
+2. Add these lines at the bottom:
+```bash
+export GDK_SCALE=1
+export QT_SCALE_FACTOR=1
+
+```
+
+
+3. Save (`Ctrl + O`, `Enter`), exit (`Ctrl + X`), and apply changes:
+```bash
+source ~/.bashrc
+
+```
+
+
+
+---
+
+### Fix 4: Disable GPU Acceleration for WSLg
+
+WSLg's virtual GPU driver can sometimes offset the rendered cursor relative to the window frame:
+
+```bash
+code . --disable-gpu
+
+```
+
+---
+
+### Quick Workarounds
+
+* **Minimize & Maximize:** Press `Win + Down Arrow` then `Win + Up Arrow`. This forces the WSLg compositor (`msrdc.exe`) to redraw and realign the mouse grid instantly.
+* **PowerToys / FancyZones:** If you use Windows PowerToys, add `msrdc.exe` to the FancyZones excluded apps list, as FancyZones breaks WSLg window hitboxes.
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+KILLING TAKS
+VS Code usually hangs when orphaned background processes or previous Electron instances get stuck in WSL.
+
+**1. Kill all hanging VS Code processes**
+Run this command in your WSL terminal to terminate all active VS Code and Electron background tasks instantly:
+
+```bash
+pkill -f code
+
+```
+
+If you also want to clear any stuck background VS Code server processes, run:
+
+```bash
+pkill -f vscode-server
+
+```
+
+**2. Check for high CPU/RAM usage with `btop**`
+Run `btop` to see if a background process (like a stuck Node.js script, Python process, or file indexer) is consuming all your CPU or RAM:
+
+```bash
+btop
+
+```
+
+*(If you see a runaway process, use your arrow keys to select it and press `k` to kill it).*
+
+**3. Relaunch cleanly**
+Once the processes are cleared, try opening your project again:
+
+```bash
+code .
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+Run this bash loop in your terminal to verify the binary installations for all your newly installed tools at once:
+
+```bash
+for cmd in code lazygit btop yazi tmux zellij; do
+  if command -v $cmd &> /dev/null; then
+    printf "%-10s \033[0;32m[INSTALLED]\033[0m %s\n" "$cmd" "$(which $cmd)"
+  else
+    printf "%-10s \033[0;31m[NOT FOUND]\033[0m\n" "$cmd"
+  fi
+done
+
+```
+
+---
+
+**Alias Checklist (`~/.bashrc`)**
+
+Reload your shell settings first:
+
+```bash
+source ~/.bashrc
+
+```
+
+Then run each short command to ensure your custom aliases are functioning:
+
+* **`lg`** — Opens **Lazygit** UI
+* **`btop`** — Opens **btop** system monitor
+* **`y`** — Opens **Yazi** file manager
+* **`z`** — Opens **Zellij** terminal workspace
+
+If any alias returns `command not found`, re-open `~/.bashrc` with `nano ~/.bashrc` to ensure the `alias` lines were saved properly.
+
+
+
+for cmd in code lazygit btop yazi tmux zellij spyder zed; do
+  if command -v $cmd &> /dev/null; then
+    printf "%-10s \033[0;32m[INSTALLED]\033[0m %s\n" "$cmd" "$(which $cmd)"
+  else
+    printf "%-10s \033[0;31m[NOT FOUND]\033[0m\n" "$cmd"
+  fi
+done
+
+
+
+
+---
+
+If `code .` broke or froze, it is usually caused by orphaned background IPC sockets or hung VS Code server instances. You can reset it instantly without restarting WSL:
+
+```bash
+pkill -9 -f code
+pkill -9 -f vscode
+
+```
+
+If you want alternative editors running natively inside Linux/WSLg, **Zed** and **Spyder** are both solid options.
+
+---
+
+### 1. Installing Zed (Blazingly Fast, Rust-Based)
+
+Zed is a GPU-accelerated, lightweight editor built in Rust with native Wayland support. It works well in terminal workflows and launches almost instantly.
+
+**Installation Command:**
+
+```bash
+curl -f https://zed.dev/install.sh | sh
+
+```
+
+**Add to PATH & Shell Configuration:**
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+```
+
+**Usage:**
+
+* Launch current directory: `zed .`
+* Open a specific file: `zed main.py`
+
+---
+
+### 2. Installing Spyder (Scientific Python IDE)
+
+Spyder is a Python-focused IDE featuring a variable explorer, integrated IPython console, and inline plotting capabilities.
+
+**Installation (System Package Manager):**
+
+```bash
+sudo apt update
+sudo apt install -y spyder pyqt5-dev-tools
+
+```
+
+*(Alternatively, if you use `pip` in a Python virtual environment: `pip install spyder`)*
+
+**Usage:**
+
+```bash
+spyder
+
+```
+
+---
+
+### 3. Quick Terminal Aliases (`.bashrc`)
+
+Add shortcuts so you can launch either editor from your terminal using short commands:
+
+```bash
+echo "alias zed='zed .'" >> ~/.bashrc
+echo "alias sp='spyder &'" >> ~/.bashrc
+source ~/.bashrc
+
+```
+
+* **`zed`**: Opens current folder in Zed.
+* **`sp`**: Launches Spyder as a background GUI process so your terminal stays free.
+
+
+---
+
+When every GUI editor stops launching simultaneously in WSL2, the underlying WSLg display server or X11/Wayland IPC sockets have locked up.
+
+---
+
+### Step 1: Force Restart WSL (Most Reliable Fix)
+
+The fastest way to recover the GUI subsystem is to shut down the WSL virtual machine entirely so Windows can restart WSLg clean.
+
+1. Open **Windows PowerShell** or **Command Prompt** (on Windows, outside WSL).
+2. Run:
+```powershell
+wsl --shutdown
+
+```
+
+
+3. Reopen your Ubuntu WSL terminal and test launching your editor:
+```bash
+zed .
+# or
+code .
+
+```
+
+
+
+---
+
+### Step 2: Emergency Process & Socket Cleanup (Inside Linux)
+
+If you want to clear stuck processes without leaving your current Linux terminal session:
+
+```bash
+# Force kill all hanging IDEs and display processes
+pkill -9 -f "code|vscode|zed|spyder|Xwayland|weston"
+
+# Remove stale display sockets
+sudo rm -rf /tmp/.X11-unix /tmp/.wayland-*
+
+```
+
+---
+
+### Step 3: Verify WSL Display Variables
+
+Ensure your Linux environment knows where to send GUI windows:
+
+```bash
+echo "DISPLAY=$DISPLAY | WAYLAND_DISPLAY=$WAYLAND_DISPLAY"
+
+```
+
+* **Expected Output:** Should report values like `DISPLAY=:0` and `WAYLAND_DISPLAY=wayland-0`.
+* **If Blank:** Reset them in your active session by running:
+```bash
+export DISPLAY=:0
+export WAYLAND_DISPLAY=wayland-0
+
+```
+
+
+
+---
+
+### Step 4: Run an Editor with Verbose Logging
+
+To see the exact error stopping your editor from opening, run Zed or Spyder directly in your foreground terminal:
+
+```bash
+# Test Zed with logs
+zed --wait .
+
+```
+
+```bash
+# Test Spyder with logs
+spyder
+
+```
+
+If you see an error like `Could not connect to display` or `GPU process crashed`, proceed to Step 5.
+
+---
+
+### Step 5: Update WSL & Graphics Drivers (Windows)
+
+If WSLg remains broken after a shutdown, your Windows WSL package or graphics driver needs an update. Run in **Windows PowerShell as Administrator**:
+
+```powershell
+wsl --update
+wsl --shutdown
+
+```
+
+
